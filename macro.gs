@@ -76,6 +76,7 @@ function RecordDay() {
 
           spreadsheet.getRange('G' + increment3).setValue(event);
 
+
           var eventSheetName = "'" + eventSpreadsheet.getSheetName() + "'";
 
           spreadsheet.getRange('H' + increment3).setFormula(eventSheetName + '!B' + increment2);
@@ -110,6 +111,42 @@ function RecordDay() {
     clearTomorrowSpreadsheet.getRange('D' + increment5).setValue("");
     increment4++;
   }
+
+
+
+
+
+      var increment5 = 4;
+      while (spreadsheet.getRange('G' + increment5).getValue() != ""){
+        increment5++;
+      }
+      increment5--;
+
+      spreadsheet.getRange('G4:N' + increment5).sort({column: 8, ascending: false});
+
+      spreadsheet.getRange('G3:H' + increment5).activate();
+      var chart = spreadsheet.newChart()
+      .asColumnChart()
+      .addRange(spreadsheet.getRange('G3:H' + increment5))
+      .setMergeStrategy(Charts.ChartMergeStrategy.MERGE_COLUMNS)
+      .setTransposeRowsAndColumns(false)
+      .setNumHeaders(1)
+      .setHiddenDimensionStrategy(Charts.ChartHiddenDimensionStrategy.IGNORE_BOTH)
+      .setOption('useFirstColumnAsDomain', true)
+      .setOption('isStacked', 'false')
+      .setOption('title', 'Time vs. Event')
+      .setXAxisTitle('Event')
+      .setYAxisTitle('Time')
+      .setOption('height', 481)
+      .setOption('width', 934)
+      .setPosition(31, 6, 99, 0)
+      .build();
+      spreadsheet.insertChart(chart);
+
+
+
+
+
 
 };
 
@@ -324,7 +361,7 @@ function CreateGraphsforEvent() {
   currentSheet.insertChart(DailyAmountChart);
 
   var DailyAverageTimeChart = currentSheet.newChart()
-  .asColumnChart()
+  .asLineChart()
   .addRange(currentSheet.getRange('A2:A'))
   .addRange(currentSheet.getRange('D2:D'))
   .addRange(currentSheet.getRange('H2:H'))
@@ -332,17 +369,19 @@ function CreateGraphsforEvent() {
   .setTransposeRowsAndColumns(false)
   .setNumHeaders(-1)
   .setHiddenDimensionStrategy(Charts.ChartHiddenDimensionStrategy.IGNORE_BOTH)
-  .setOption('bubble.stroke', '#000000')
   .setOption('useFirstColumnAsDomain', true)
+  .setOption('curveType', 'none')
+  .setOption('domainAxis.direction', 1)
   .setOption('title', 'Daily Average Time vs. Date')
   .setOption('annotations.domain.textStyle.color', '#808080')
-  .setOption('textStyle.color', '#000000')
   .setOption('legend.textStyle.color', '#191919')
   .setOption('titleTextStyle.color', '#757575')
   .setOption('annotations.total.textStyle.color', '#808080')
   .setOption('hAxis.textStyle.color', '#000000')
   .setOption('vAxes.0.textStyle.color', '#000000')
-  .setPosition(6, 3, 7, 18)
+  .setOption('series.0.labelInLegend', 'Average Time for 1')
+  .setOption('series.1.labelInLegend', 'Cumulative Average Time for 1')
+  .setPosition(38, 10, 14, 8)
   .build();
   currentSheet.insertChart(DailyAverageTimeChart);
 };
@@ -354,7 +393,7 @@ function ContinueRecordingDay() {
   var rowToContinueFrom = response.getResponseText();
 
 
-  // just does RecordDay macro
+
   var spreadsheet = SpreadsheetApp.getActive();
   spreadsheet.getRange('C1').setValue("Undo 1");
   spreadsheet.getRange('D1').setValue("Undo 2");
@@ -465,4 +504,112 @@ function ContinueRecordingDay() {
   }
 
 
+
+
+  var increment5 = 4;
+  while (spreadsheet.getRange('G' + increment5).getValue() != ""){
+    increment5++;
+  }
+  increment5--;
+
+  spreadsheet.getRange('G4:N' + increment5).sort({column: 8, ascending: false});
+
+  spreadsheet.getRange('G3:H' + increment5).activate();
+  var chart = spreadsheet.newChart()
+  .asColumnChart()
+  .addRange(spreadsheet.getRange('G3:H' + increment5))
+  .setMergeStrategy(Charts.ChartMergeStrategy.MERGE_COLUMNS)
+  .setTransposeRowsAndColumns(false)
+  .setNumHeaders(1)
+  .setHiddenDimensionStrategy(Charts.ChartHiddenDimensionStrategy.IGNORE_BOTH)
+  .setOption('useFirstColumnAsDomain', true)
+  .setOption('isStacked', 'false')
+  .setOption('title', 'Time vs. Event')
+  .setXAxisTitle('Event')
+  .setYAxisTitle('Time')
+  .setOption('height', 481)
+  .setOption('width', 934)
+  .setPosition(31, 6, 99, 0)
+  .build();
+  spreadsheet.insertChart(chart);
+
+
+
+
+};
+
+function ColumnCharttoLineChartforAllTasks() {
+  var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  for (var i = 0; i < sheets.length; i++){
+    var currentSheet = sheets[i];
+
+    if (currentSheet.getRange('A2').getValue() == "Date"){
+
+      charts = currentSheet.getCharts();
+      chart = charts[charts.length - 1];
+      currentSheet.removeChart(chart);
+
+      var DailyAverageTimeChart = currentSheet.newChart()
+      .asLineChart()
+      .addRange(currentSheet.getRange('A2:A'))
+      .addRange(currentSheet.getRange('D2:D'))
+      .addRange(currentSheet.getRange('H2:H'))
+      .setMergeStrategy(Charts.ChartMergeStrategy.MERGE_COLUMNS)
+      .setTransposeRowsAndColumns(false)
+      .setNumHeaders(-1)
+      .setHiddenDimensionStrategy(Charts.ChartHiddenDimensionStrategy.IGNORE_BOTH)
+      .setOption('useFirstColumnAsDomain', true)
+      .setOption('curveType', 'none')
+      .setOption('domainAxis.direction', 1)
+      .setOption('title', 'Daily Average Time vs. Date')
+      .setOption('annotations.domain.textStyle.color', '#808080')
+      .setOption('legend.textStyle.color', '#191919')
+      .setOption('titleTextStyle.color', '#757575')
+      .setOption('annotations.total.textStyle.color', '#808080')
+      .setOption('hAxis.textStyle.color', '#000000')
+      .setOption('vAxes.0.textStyle.color', '#000000')
+      .setOption('series.0.labelInLegend', 'Average Time for 1')
+      .setOption('series.1.labelInLegend', 'Cumulative Average Time for 1')
+      .setPosition(38, 10, 14, 8)
+      .build();
+      currentSheet.insertChart(DailyAverageTimeChart);
+    }
+  }
+};
+
+function CreateGraphsforallDays() {
+  var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  for (var i = 0; i < sheets.length; i++){
+    var currentSheet = sheets[i];
+
+    if (currentSheet.getRange('C1').getValue() == "Undo 1"){
+
+      var increment = 4;
+      while (currentSheet.getRange('G' + increment).getValue() != ""){
+        increment++;
+      }
+      increment--;
+
+      currentSheet.getRange('G4:N' + increment).sort({column: 8, ascending: false});
+
+      currentSheet.getRange('G3:H' + increment).activate();
+      var chart = currentSheet.newChart()
+      .asColumnChart()
+      .addRange(currentSheet.getRange('G3:H' + increment))
+      .setMergeStrategy(Charts.ChartMergeStrategy.MERGE_COLUMNS)
+      .setTransposeRowsAndColumns(false)
+      .setNumHeaders(1)
+      .setHiddenDimensionStrategy(Charts.ChartHiddenDimensionStrategy.IGNORE_BOTH)
+      .setOption('useFirstColumnAsDomain', true)
+      .setOption('isStacked', 'false')
+      .setOption('title', 'Time vs. Event')
+      .setXAxisTitle('Event')
+      .setYAxisTitle('Time')
+      .setOption('height', 481)
+      .setOption('width', 934)
+      .setPosition(31, 6, 99, 0)
+      .build();
+      currentSheet.insertChart(chart);
+    }
+  }
 };
