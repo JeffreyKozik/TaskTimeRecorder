@@ -2,6 +2,7 @@
 
 function RecordDay() {
   var spreadsheet = SpreadsheetApp.getActive();
+  var currentsheet = spreadsheet.getActiveSheet();
   spreadsheet.getRange('C1').setValue("Undo 1");
   spreadsheet.getRange('D1').setValue("Undo 2");
   var date = spreadsheet.getRange('A1').getValue();
@@ -76,7 +77,6 @@ function RecordDay() {
 
           spreadsheet.getRange('G' + increment3).setValue(event);
 
-
           var eventSheetName = "'" + eventSpreadsheet.getSheetName() + "'";
 
           spreadsheet.getRange('H' + increment3).setFormula(eventSheetName + '!B' + increment2);
@@ -117,17 +117,17 @@ function RecordDay() {
 
 
       var increment5 = 4;
-      while (spreadsheet.getRange('G' + increment5).getValue() != ""){
+      while (currentsheet.getRange('G' + increment5).getValue() != ""){
         increment5++;
       }
       increment5--;
 
-      spreadsheet.getRange('G4:N' + increment5).sort({column: 8, ascending: false});
+      currentsheet.getRange('G4:N').sort({column: 8, ascending: false});
 
-      spreadsheet.getRange('G3:H' + increment5).activate();
-      var chart = spreadsheet.newChart()
+      currentsheet.getRange('G3:H').activate();
+      var chart = currentsheet.newChart()
       .asColumnChart()
-      .addRange(spreadsheet.getRange('G3:H' + increment5))
+      .addRange(currentsheet.getRange('G3:H'))
       .setMergeStrategy(Charts.ChartMergeStrategy.MERGE_COLUMNS)
       .setTransposeRowsAndColumns(false)
       .setNumHeaders(1)
@@ -141,13 +141,13 @@ function RecordDay() {
       .setOption('width', 934)
       .setPosition(31, 6, 99, 0)
       .build();
-      spreadsheet.insertChart(chart);
+      currentsheet.insertChart(chart);
 
 
 
 
 
-
+  
 };
 
 function UpdateBarGraphofAllActivities() {
@@ -395,6 +395,7 @@ function ContinueRecordingDay() {
 
 
   var spreadsheet = SpreadsheetApp.getActive();
+  var currentsheet = spreadsheet.getActiveSheet();
   spreadsheet.getRange('C1').setValue("Undo 1");
   spreadsheet.getRange('D1').setValue("Undo 2");
   var date = spreadsheet.getRange('A1').getValue();
@@ -506,32 +507,33 @@ function ContinueRecordingDay() {
 
 
 
-  var increment5 = 4;
-  while (spreadsheet.getRange('G' + increment5).getValue() != ""){
-    increment5++;
-  }
-  increment5--;
+    var increment5 = 4;
+      while (currentsheet.getRange('G' + increment5).getValue() != ""){
+        increment5++;
+      }
+      increment5--;
 
-  spreadsheet.getRange('G4:N' + increment5).sort({column: 8, ascending: false});
+      currentsheet.getRange('G4:N' + increment5).sort({column: 8, ascending: false});
 
-  spreadsheet.getRange('G3:H' + increment5).activate();
-  var chart = spreadsheet.newChart()
-  .asColumnChart()
-  .addRange(spreadsheet.getRange('G3:H' + increment5))
-  .setMergeStrategy(Charts.ChartMergeStrategy.MERGE_COLUMNS)
-  .setTransposeRowsAndColumns(false)
-  .setNumHeaders(1)
-  .setHiddenDimensionStrategy(Charts.ChartHiddenDimensionStrategy.IGNORE_BOTH)
-  .setOption('useFirstColumnAsDomain', true)
-  .setOption('isStacked', 'false')
-  .setOption('title', 'Time vs. Event')
-  .setXAxisTitle('Event')
-  .setYAxisTitle('Time')
-  .setOption('height', 481)
-  .setOption('width', 934)
-  .setPosition(31, 6, 99, 0)
-  .build();
-  spreadsheet.insertChart(chart);
+      currentsheet.getRange('G3:H' + increment5).activate();
+      var chart = currentsheet.newChart()
+      .asColumnChart()
+      .addRange(currentsheet.getRange('G3:H' + increment5))
+      .setMergeStrategy(Charts.ChartMergeStrategy.MERGE_COLUMNS)
+      .setTransposeRowsAndColumns(false)
+      .setNumHeaders(1)
+      .setHiddenDimensionStrategy(Charts.ChartHiddenDimensionStrategy.IGNORE_BOTH)
+      .setOption('useFirstColumnAsDomain', true)
+      .setOption('isStacked', 'false')
+      .setOption('title', 'Time vs. Event')
+      .setXAxisTitle('Event')
+      .setYAxisTitle('Time')
+      .setOption('height', 481)
+      .setOption('width', 934)
+      .setPosition(31, 6, 99, 0)
+      .build();
+      currentsheet.insertChart(chart);
+
 
 
 
